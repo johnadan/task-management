@@ -5,10 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AuthController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
 // Public routes
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
@@ -24,7 +20,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // User info endpoint
     Route::get('/user', function (Request $request) {
-        // return $request->user();
         // Debug the authenticated user
         $user = $request->user();
         \Log::info('Auth user in /user endpoint: ' . ($user ? $user->id . ' - ' . $user->email : 'No user'));
@@ -37,6 +32,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('tasks/{task}/images/{image}', [TaskController::class, 'deleteImage']);
 });
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });

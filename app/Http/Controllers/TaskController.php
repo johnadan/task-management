@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-use App\Models\{Task, TaskImage, User};
-// use App\Models\Task;
-// use App\Models\TaskImage;
-// use App\Models\User;
+use App\Models\{Task, TaskImage};
 
 class TaskController extends Controller
 {
@@ -30,13 +27,6 @@ class TaskController extends Controller
         $query = Task::where('user_id', $user->id);
 
         // Apply filters
-        // if ($request->has('status')) {
-        //     $query->where('status', $request->status);
-        // }
-
-        // if ($request->has('search')) {
-        //     $query->where('title', 'like', '%' . $request->search . '%');
-        // }
         if ($request->has('status') && $request->status) {
             $query->where('status', $request->status);
         }
@@ -92,8 +82,6 @@ class TaskController extends Controller
         return response()->json($task->load('images'), 201);
     }
 
-    // public function show(Task $task)
-    // public function show(Request $request, Task $task)
     public function show(Request $request, $id)
     {
         // $this->authorize('view', $task);
@@ -111,11 +99,6 @@ class TaskController extends Controller
         }
 
         // Check if the task belongs to this user
-        // if ($task->user_id !== $user->id) {
-        //     \Log::info('Task does not belong to the authenticated user');
-        //     return response()->json(['message' => 'Unauthorized'], 403);
-        // }
-
         // Find the task by ID
         $task = Task::where('id', $id)->where('user_id', $user->id)->first();
 
@@ -128,11 +111,8 @@ class TaskController extends Controller
         return $task->load('images');
     }
 
-    // public function update(Request $request, Task $task)
     public function update(Request $request, $id)
     {
-        // $this->authorize('update', $task);
-
         // Debug logs
         \Log::info('Update method called for task ID: ' . $id);
         \Log::info('Request user: ' . ($request->user() ? $request->user()->id . ' - ' . $request->user()->email : 'none'));
@@ -169,11 +149,8 @@ class TaskController extends Controller
         return response()->json($task->load('images'));
     }
 
-    // public function destroy(Task $task)
     public function destroy(Request $request, $id)
     {
-        // $this->authorize('delete', $task);
-
         // Get authenticated user from request
         $user = $request->user();
 
@@ -198,11 +175,8 @@ class TaskController extends Controller
         return response()->json(null, 204);
     }
 
-    // public function uploadImages(Request $request, Task $task)
     public function uploadImages(Request $request, $id)
     {
-        // $this->authorize('update', $task);
-
         // Get authenticated user from request
         $user = $request->user();
 
@@ -229,12 +203,6 @@ class TaskController extends Controller
     // public function deleteImage(Task $task, TaskImage $image)
     public function deleteImage(Request $request, $taskId, $imageId)
     {
-        // $this->authorize('update', $task);
-
-        // if ($image->task_id !== $task->id) {
-        //     return response()->json(['error' => 'Image does not belong to this task'], 403);
-        // }
-
         // Debug logs
         \Log::info('DeleteImage method called for task ID: ' . $taskId . ', image ID: ' . $imageId);
         \Log::info('Request user: ' . ($request->user() ? $request->user()->id . ' - ' . $request->user()->email : 'none'));

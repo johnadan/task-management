@@ -39,8 +39,6 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // dd($request->all());
-
         if (!Auth::attempt($validated)) {
             return response()->json([
                 'message' => 'Invalid login credentials'
@@ -48,7 +46,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $validated['email'])->firstOrFail();
-        // dd($user);
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
